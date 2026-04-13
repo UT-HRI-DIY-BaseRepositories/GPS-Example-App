@@ -159,9 +159,17 @@
       The result is that if the user pressed on the "Start Tracking" button again
       accident, then the if statement above will catch that "tracking = true" and
       will prevent the startTracking() function from duplicating its action. */
+      if (totaldistanceChart) {
+        totaldistanceChart.update(); /* we update the chart to have no x nor y values.
+        It is important to realize that the totaldistanceChart variable should be "null"
+        when the user just opens the website. Therefore, the only scenario when 
+        totaldistanceChart is "true" would be if the user had previously pressed on
+        the Stop Tracking button. If the user pressed on the "Stop Tracking" button but
+        presses on the "Start Tracking" button next, this code would clear the graph
+        before the new graph is shown */ 
+      }
 
-
-      /* The watchPosition() method has THREE inputs. Its job is 
+      /* The watchPosition() method directly below has THREE inputs. Its job is 
       to pull your device's GPS data EACH time your device spits 
       out new GPS coordinates. This method is very powerful since
       it acts like a loop where it will forever collect GPS data.
@@ -228,10 +236,6 @@
       totaldist = 0;
       timeData.length = 0; // we cleared the timeData array so that it no longer stores any x-values
       totaldistanceData.length = 0; // we cleared the totaldistanceData array so that it no longer stores any y-values
-
-      if (totaldistanceChart) {
-        totaldistanceChart.update(); // we update the chart to have no x nor y values due to timeData and totaldistanceData having stored values
-      }
     }
 
 
