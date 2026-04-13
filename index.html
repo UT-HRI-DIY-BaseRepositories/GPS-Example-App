@@ -150,10 +150,16 @@
         return;
       } /* this if statement prevents the program from duplicating GPS
       tracking. This prevents duplication of tracking from happening if the user 
-      accidently pressed the "Start Tracking" button twice */
+      accidently pressed the "Start Tracking" button twice. */
       
 
-      tracking = true;
+      tracking = true; /* When the user first opened the website, the "tracking" 
+      variable was set to false. Now that the user pressed on the "Start Tracking"
+      button, the startTracking() function now prompts "tracking" to be true. 
+      The result is that if the user pressed on the "Start Tracking" button again
+      accident, then the if statement above will catch that "tracking = true" and
+      will prevent the startTracking() function from duplicating its action. */
+
 
       /* The watchPosition() method has THREE inputs. Its job is 
       to pull your device's GPS data EACH time your device spits 
@@ -184,7 +190,7 @@
 
 
 
-      
+
       /* The setInterval() method below tells the program to run the
       logPosition() function every 3 seconds if latestPosition is true 
       (meaning latestPosition has true GPS values and is not "null") */
@@ -202,7 +208,9 @@
     function stopTracking() {
 
       tracking = false; /* we want the tracking variable to be an indicator
-      of if we are in the process of tracking (true or not tracking (false) */ 
+      of whether we are in the process of tracking. We want the GPS tracking to 
+      occur when "tracking = true", and we want the GPS tracking to stop when
+      "tracking = false". */
 
       if (watchId !== null) {
         navigator.geolocation.clearWatch(watchId);
