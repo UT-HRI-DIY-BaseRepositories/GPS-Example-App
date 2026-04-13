@@ -2,24 +2,23 @@
 <html>
 <head>
   <title>GPS Distance Tracker</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css"> <!-- This line of code links the style.css file with this index.html file-->
 
-  <!-- The code directly below is used to import the Chart.js library for the Distance vs Time graph -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- This line of code imports the Chart.js library for the Distance vs Time graph -->
 </head>
 
 <body>
-  <h1>Testing GPS Distance Tracker</h1>
+  <h1>GPS Distance Tracker</h1>
 
   <button id="startBtn">Start Tracking</button>
   <button id="stopBtn">Stop Tracking</button>
 
   <h2>Distance vs Time</h2>
 
-  <!-- Canvas for the live-updating graph -->
+  <!-- Creating the canvas which makes up the live-updating graph/chart -->
   <canvas id="totaldistanceChart" width="600" height="300"></canvas>
 
-  <!-- Creating the table that is beneath the graph -->
+  <!-- Creating the table that is beneath the graph/chart. Notice that the name for each column in the table is in between the <th></th> tags -->
   <table border="1">
     <thead>
       <tr>
@@ -27,8 +26,8 @@
         <th>Time Elapsed (seconds)</th>
         <th>Latitude</th>
         <th>Longitude</th>
-        <th>Distance Since Last (m) (Haversine Formula)</th>
-        <th>Distance Since Last (m) (Distance Formula)</th>
+        <th>Distance Travelled Since Last Timestamp (m) (Haversine Formula)</th>
+        <th>Distance Travelled Since Last Timestamp (m) (Distance Formula)</th>
         <th>Total Distance (m)</th>
       </tr>
     </thead>
@@ -36,7 +35,7 @@
   </table>
 
 
-  <!-- Linking our index.html file with our script.js file -->
+  <!-- Below is all the JavaScript code -->
 
   <script>
     // ---------------------------------------------
@@ -47,29 +46,44 @@
     The watchPosition() method will input a unique number into the watchID variable, 
     thereby making watchId no longer "null". Visit the website below for more details:
     https://developer.mozilla.org/en-US/docs/Web/API/Geolocation/watchPosition */
+
+
     let intervalId = null; /* intervalId is needed to run the setInterval() method. 
     The setInterval method allows you to run a function repeatedly with a specified
     time interval. Visit the website below for more information:
     https://www.w3schools.com/jsref/met_win_setinterval.asp */
+
+
     let latestPosition = null; /* latestPosition is a variable that will store 
     the most recent GPS coordinates */
-    let lastLoggedPosition = null; /*lastLoggedPosition is a variable that will
+
+
+    let lastLoggedPosition = null; /* lastLoggedPosition is a variable that will
     store the GPS coordinates that occurred immediately before latestPosition */
+
+
     let tracking = false; /* we will use this tracking variable to help the code
     know when tracking is occurring and when it has stopped. This variable will 
     help the code know to not duplicate tracking if the user pressed the "Start
     Tracking" button twice */
+
+
     let firstLogTime = null; /* firstLogTime is a variable which will store the 
     timestamp for when the first GPS coordinates were attained */
+
+
     let totaldist = 0; /* this totaldistance variable will store our
     total distance travelled */
 
     // Arrays for graphing
-    let timeData = []; // this timeData array will store the x-axis values (0, 3, 6, 9 seconds)
+    let timeData = []; // this timeData array will store the x-axis values (0, 3, 6, 9, etc seconds)
     let totaldistanceData = []; // this totaldistanceData array will store the y-axis values (which are the total distance values)
+
+
     /* whenever we use Chart.js to create the chart, it will look at our timeData 
     and totaldistanceData, then automatically rescale our graph and units using
     an algorithm */
+
 
     // Chart object
     let totaldistanceChart = null; // this totaldistanceChart will eventually hold the Chart.js instance
@@ -80,15 +94,17 @@
     // ---------------------------------------------
     function createChart() {
       const ctx = document.getElementById("totaldistanceChart").getContext("2d"); // grabs the <canvas> element from HTML
+
+
     /* "new Chart(...)" has two arguments. The first one tells you what canvas 
     will be used to draw the chart. The second one instructs how to draw the chart */
       totaldistanceChart = new Chart( /*first argument*/ ctx, { /*second argument is the next 24 lines*/
         type: 'line', // there are many chart types to choose from. We will use the line chart
         data: { // specifies what data to show on the chart
-          labels: timeData, // these are the x-axis values
-          datasets: [{ // "dataset" pertain to the y-axis values
+          labels: timeData, // these are the x-axis values. We are using the timeData array as our x-axis
+          datasets: [{ // "dataset" pertains to the y-axis values
             label: 'Total Distance (m)', // labelling the LEGEND (at the top of the graph) as 'Total Distance (m)'
-            data: totaldistanceData, // using totaldistanceData as the y-values
+            data: totaldistanceData, // We are using the totaldistanceData array as the y-values
             borderColor: 'blue', // color of the line
             borderWidth: 2, // thickness of the line
             fill: false, // the area under the curve is NOT filled in
@@ -151,10 +167,14 @@
         } /* Input #1: a callback function used to put the new GPS 
         coordinates into the variable latestPosition, thereby converting
         latestPosition from being "null" to having true GPS values */,
+
+
         function(err) {
           console.error(err);
         } /* Input #2: a callback function that tells your program
         what to do if the GPS coordinates failed to load */,
+
+
         {
           enableHighAccuracy: true,
           maximumAge: 0,
@@ -162,6 +182,9 @@
         } /* Input #3: an object which gives specific configuration options */
       );
 
+
+
+      
       /* The setInterval() method below tells the program to run the
       logPosition() function every 3 seconds if latestPosition is true 
       (meaning latestPosition has true GPS values and is not "null") */
