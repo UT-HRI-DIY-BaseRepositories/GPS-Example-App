@@ -14,6 +14,7 @@
   <button id="stopBtn">Stop Tracking</button>
 
   <h2>Distance vs Time</h2>
+  <p id ="paragraphUpdate"> The tracker may take a few seconds before tracking your coordinates. This paragraph will inform you if the app has started/stopped tracking your location. </p>
 
   <!-- Creating the canvas which makes up the live-updating graph/chart -->
   <canvas id="totaldistanceChart" width="600" height="300"></canvas>
@@ -74,6 +75,9 @@
 
     let totaldist = 0; /* this totaldistance variable will store our
     total distance travelled */
+
+    let paragraphVar = document.getElementById("paragraphUpdate"); // this variable (paragraphVar) stores your paragraph (identified with the id = paragraphUpdate)
+
 
     // Arrays for graphing
     let timeData = []; // this timeData array will store the x-axis values (0, 3, 6, 9, etc seconds)
@@ -147,26 +151,32 @@
     function startTracking() {
 
       if (tracking) {
+        paragraphVar.innerHTML = 'Please be patient. You pressed on the "Start Tracking" button already!'
         return;
       } /* this if statement prevents the program from duplicating GPS
       tracking. This prevents duplication of tracking from happening if the user 
       accidently pressed the "Start Tracking" button twice. */
       
+      if (tracking === false) {
+        paragraphVar.innerHTML = 'Tracking has started.';
+      } /* if tracking is false, then the message "Tracking has started" will be displayed */
 
       tracking = true; /* When the user first opened the website, the "tracking" 
       variable was set to false. Now that the user pressed on the "Start Tracking"
       button, the startTracking() function now prompts "tracking" to be true. 
       The result is that if the user pressed on the "Start Tracking" button again
-      accident, then the if statement above will catch that "tracking = true" and
+      on accident, then the very first if statement above will catch that "tracking = true" and
       will prevent the startTracking() function from duplicating its action. */
+
+
       if (totaldistanceChart) {
-        totaldistanceChart.update(); /* we update the chart to have no x nor y values.
+        totaldistanceChart.update(); /* we essentially clear the chart using this if statement.
         It is important to realize that the totaldistanceChart variable should be "null"
         when the user just opens the website. Therefore, the only scenario when 
-        totaldistanceChart is "true" would be if the user had previously pressed on
-        the Stop Tracking button. If the user pressed on the "Stop Tracking" button but
-        presses on the "Start Tracking" button next, this code would clear the graph
-        before the new graph is shown */ 
+        totaldistanceChart is "true" AND when the code would reach to this if statement
+        would be if the user had previously pressed on the Stop Tracking button. 
+        If the user pressed on the "Stop Tracking" button but then presses on the "Start Tracking"
+        button next, this code would clear the graph before the new graph is shown */ 
       }
 
       /* The watchPosition() method directly below has THREE inputs. Its job is 
@@ -219,6 +229,8 @@
       of whether we are in the process of tracking. We want the GPS tracking to 
       occur when "tracking = true", and we want the GPS tracking to stop when
       "tracking = false". */
+
+      paragraphVar.innerHTML = 'Tracking has stopped.'; // changes the text so as to report to the user that "Tracking has stopped."
 
       if (watchId !== null) {
         navigator.geolocation.clearWatch(watchId);
