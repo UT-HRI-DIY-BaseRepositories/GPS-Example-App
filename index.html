@@ -8,7 +8,7 @@
 </head>
 
 <body>
-  <h1>GPS Distance Tracker</h1>
+  <h1>Testing GPS Distance Tracker</h1>
 
   <button id="startBtn">Start Tracking</button>
   <button id="stopBtn">Stop Tracking</button>
@@ -169,15 +169,15 @@
       will prevent the startTracking() function from duplicating its action. */
 
 
-      if (totaldistanceChart) {
-        totaldistanceChart.update(); /* we essentially clear the chart using this if statement.
-        It is important to realize that the totaldistanceChart variable should be "null"
-        when the user just opens the website. Therefore, the only scenario when 
-        totaldistanceChart is "true" AND when the code would reach to this if statement
-        would be if the user had previously pressed on the Stop Tracking button. 
-        If the user pressed on the "Stop Tracking" button but then presses on the "Start Tracking"
-        button next, this code would clear the graph before the new graph is shown */ 
-      }
+      totaldistanceChart.update(); /* this line of code tells the program to refresh the chart.
+      In practice, this code clears the chart if the user had pressed on the 
+      "Stop Tracking" button right before pressing on the "Start Tracking" button.
+      The reason that the chart is cleared in the aforementioned situation is because
+      the user had cleared the timeData and totaldistanceData arrays when clicking on 
+      the "Stop Tracking" button. Therefore, this .update() method would make the chart 
+      empty to reflect the empty arrays. */
+      
+
 
       /* The watchPosition() method directly below has THREE inputs. Its job is 
       to pull your device's GPS data EACH time your device spits 
@@ -262,6 +262,8 @@
       let distance = 0; /* updates the distance to be 0 at the start 
       of each operation of the logPosition() function. This distance
       variable will track the distance using the Haversine formula */
+
+
       let distance2 = 0; /* updates the distance2 to be 0 at the start 
       of each operation of the logPosition() function. This distance2
       variable will track the distance using a modified distance formula */
@@ -275,7 +277,9 @@
       firstLogTime variable only when the firstlogTime variable was previously "null".
       Very handy since we ONLY want to give a timestamp to firstLogTime on the
       FIRST occurrence.*/
-      let elapsedSeconds = Math.floor((Date.now() - firstLogTime) / 1000); // elapsedSeconds tells us the amount of time that has elapsed since the firstLogTime
+
+
+      let elapsedSeconds = Math.floor((Date.now() - firstLogTime) / 1000); // elapsedSeconds tells us the amount of time that has elapsed since the firstLogTime, rounded down to the nearest whole second
 
       // Compute distances
       if (lastLoggedPosition) {
@@ -315,9 +319,23 @@
       }
 
       // ---------------------------------------------
-      /* UPDATE TABLE: each <td> </td> line of code represents a column in the table. The order of the columns 
-      (from left to right) correspond to the <td> </td> lines (from top to bottom). This table has 7 columns and must
-      match the table found in the index.html file. */
+
+      /* UPDATE TABLE: each <td> </td> line of code below represents a column 
+      in the table found in the website. The order of the columns on the website
+      (from left to right) correspond to the <td> </td> lines below (from top to 
+      bottom). This table has 7 columns and must match the table found in the HTML 
+      section of the code (from lines 22-36). */
+
+      /* Also, below is a break down of what each line in the table represents:
+        //<td>${new Date().toLocaleTimeString()}</td> --> Current timestamp (formatted for the user's locale)
+        //<td>${elapsedSeconds}</td> --> Elapsed time since tracking began (in seconds)
+        //<td>${lat.toFixed(6)}</td> --> Latitude rounded to 6 decimal places
+        //<td>${lon.toFixed(6)}</td> --> Longitude rounded to 6 decimal places
+        //<td>${distance.toFixed(2)}</td> --> Distance (using Haversine formula) since previous GPS point (rounded to 2 decimals)
+        //<td>${distance2.toFixed(2)}</td> --> Distance (using modified distance formula) since previous GPS point (rounded to 2 decimals)
+        //<td>${totaldist.toFixed(2)}</td> --> Total distance rounded to 2 decimals
+      */
+
       // ---------------------------------------------
       const row = `
         <tr>
@@ -358,10 +376,10 @@
       return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)); // returns this value as your distance
     }
 
-
     // ---------------------------------------------
     // MODIFIED DISTANCE FORMULA: this function inputs your two GPS coordinates and spits out the distance between them using a modified distance formula
     // ---------------------------------------------
+    
     function distFormula(lat1, lon1, lat2, lon2) {
       const R = 6371000; // radius of the Earth in meters
 
